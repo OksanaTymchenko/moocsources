@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="span5" style="display: inline;">
+                <img src="{{course.image}}" class="img-polaroid" alt="Lenovo Desktop" style="vertical-align: initial;">
+            </div>
+            <div class="span5" style="display: inline;">
+
+			<iframe width="560" height="315" src="{{video}}" frameborder="0" allowfullscreen>
+
+			</iframe>
+            </div>
+
+            <div class="span7">
+                <h1>{{course.name}}</h1>
+                <p>{% autoescape off %}{{course.description}}{% endautoescape %}</p>
+                <p><a href="{{course.link}}" class="btn btn-success btn-large">Go to course!</a></p>
+                {% if not request.user.id is None %}
+                <form action="/favorite/{{ course.id }}/" method="get">
+                    {% if favorites < 1 %}
+                <button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-star"></span> Favorite</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-star"></span> Unfavorite</button>
+                    {% endif %}
+                </form>
+
+                <br>
+                <form action="/like/{{ course.id }}/" method="get">
+                <button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span> Like</button>
+                </form>
+
+                {% endif %}
+            <br>
+                <p><span class="glyphicon glyphicon-heart"></span> {{ likes }}</p>
+                <hr>
+            </div>
+        </div>
+        <div class="row product-info">
+            <div class="span12">
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade in active">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Institution</th>
+                                    <td>{{course.provider}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Source</th>
+                                    <td>{{course.source}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Language</th>
+                                    <td>{{course.language}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Duration</th>
+                                    <td>{{course.duration}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Start date</th>
+                                    <td>{{course.start_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="list-group">
+    	<h4  class="list-group-item active">Instructors</h4>
+    	{% for i in instructors %}
+			<div class="list-group-item">
+	        	<h4 class="list-group-item-heading">{{i.name}}</h4>
+	        	<p class="list-group-item-text">{{i.info}}</p>
+	    	</div>
+    	{% endfor %}
+		</div>
+    </div>
+
+
+{% endblock content %}

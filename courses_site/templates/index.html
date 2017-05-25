@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 align="center">Welcome to MOOC platform</h1>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h3>Brief description of the system</h3>
+            <ol> <span style="font-weight: bold">How to use the system</span>
+                <li>Sign up</li>
+                <li>Fill questionnaire of your preferences</li>
+                <li>Log in</li>
+                <li>Enjoy!</li>
+            </ol>
+
+            <div class="qa" style="background-color: #eda3aa">
+            <h5 align="center" style="font-weight: bold">Q&A</h5>
+            <p style="font-weight: bold">Why should I fill the questionnaire?</p>
+            <p>Every user who filled the questionnaire will get some list of recommended courses.</p>
+            <p style="font-weight: bold">How can I find courses?</p>
+            <p>It is possible to find courses through the search form or in all catalog.</p>
+                </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    </div>
+{% endblock %}
