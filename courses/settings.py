@@ -25,7 +25,7 @@ SECRET_KEY = 'pprduan4x*$nm#vz%nq^-r3rjo11#x%rhh6m+sxq5q@di5ht$4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shrouded-crag-79222.herokuapp.com']
 
 import dj_database_url
 
