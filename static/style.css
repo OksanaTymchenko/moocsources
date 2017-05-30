@@ -1,0 +1,32 @@
+
+.multiselect {
+  width: 200px;
+}
+
+.selectBox {
+  position: relative;
+}
+
+
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#checkboxes1, #checkboxes2, #checkboxes3, #checkboxes4, #checkboxes5  {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+#checkboxes1 label, #checkboxes2  label, #checkboxes3 label, #checkboxes4 label, #checkboxes5 label {
+  display: block;
+}
+
+#checkboxes1 label:hover, #checkboxes2 label:hover, #checkboxes3 label:hover, #checkboxes4 label:hover, #checkboxes5 label:hover {
+  background-color: #1e90ff;
+}
+

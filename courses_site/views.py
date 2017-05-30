@@ -19,6 +19,8 @@ def index(request):
 
 
 def allcourses(request):
+    sort = False
+
     categories = ''
     providers = ''
     sources = ''
@@ -34,6 +36,8 @@ def allcourses(request):
         language = request.GET.get('l')
     if request.GET.get('d'):
         duration = request.GET.get('d')
+    if request.GET.get('sorted'):
+        sort = True
 
     courses_list = Course.objects.all()
     if categories:
@@ -47,12 +51,47 @@ def allcourses(request):
     if duration:
         courses_list = courses_list.filter(duration_filter__in=duration.split('_'))
 
-    filter_category = Course.objects.order_by('category').values_list('category', flat=True).distinct()
-    filter_provider = Course.objects.order_by('provider').values_list('provider', flat=True).distinct()
-    filter_source = Course.objects.order_by('source').values_list('source', flat=True).distinct()
-    filter_lang = Course.objects.order_by('language').values_list('language', flat=True).distinct()
-    filter_duration = Course.objects.exclude(duration_filter__isnull=True).order_by('duration_filter').values_list(
-        'duration_filter', flat=True).distinct()
+
+    # Sorting part
+    if sort:
+        print("sort")
+        sorted_courses = []
+        for c in courses_list:
+            likes = Like.objects.filter(course__id=c.id).count()
+            sorted_courses.append([c, likes])
+        sorted_courses = sorted(sorted_courses, key=lambda item: -item[1])
+        courses_list = [c[0] for c in sorted_courses]
+
+
+    # filter_category = Course.objects.order_by('category').values_list('category', flat=True).distinct().annotate(cc=Count('category'))
+    filter_category = Course.objects.exclude(category__isnull=True).order_by('category').values('category').distinct().annotate(count = Count('category'))
+    f_c = {}
+    for item in filter_category:
+        f_c[item['category']] = item['count']
+    # filter_category = {value : filter_category.get(key, None) for key, value in firstDictionary.items()}
+    # for each in filter_category:
+    #     print(each.category, each.count)
+    filter_provider = Course.objects.exclude(provider__isnull=True).order_by('provider').values('provider').distinct().annotate(count = Count('provider'))
+    f_p = {}
+    for item in filter_provider:
+        f_p[item['provider']] = item['count']
+
+    filter_source = Course.objects.order_by('source').values('source').distinct().annotate(count = Count('source'))
+    f_s = {}
+    for item in filter_source:
+        f_s[item['source']] = item['count']
+
+    filter_lang = Course.objects.order_by('language').values('language').distinct().annotate(count = Count('language'))
+    f_l = {}
+    for item in filter_lang:
+        f_l[item['language']] = item['count']
+
+    filter_duration = Course.objects.exclude(duration_filter__isnull=True).order_by('duration_filter').values(
+        'duration_filter').distinct().annotate(count = Count('duration_filter'))
+
+    f_d = {}
+    for item in filter_duration:
+        f_d[item['duration_filter']] = item['count']
 
     paginator = Paginator(courses_list, 10)
     page = request.GET.get('page')
@@ -69,10 +108,22 @@ def allcourses(request):
     end_index = index + 10 if index <= max_index - 10 else max_index
     page_range = paginator.page_range[start_index:end_index]
 
-    context = {'courses_list': courses, 'filter_category': filter_category, 'filter_provider': filter_provider,
-               'filter_source': filter_source, 'filter_lang': filter_lang, 'filter_duration': filter_duration,
-               'page_range': page_range}
+    new_path = request.get_full_path()
+    print(new_path)
+    # print (new_path.find('page='))
+    if new_path != '/courses/' and new_path.find('page=')!=-1:
+        new_path = new_path[:new_path.find('page=')][:-1]
+        # pass
+    elif new_path == '/courses/':
+        new_path+='?'
+    print(new_path)
+    context = {'courses_list': courses, 'filter_category': sorted(f_c.items()), 'filter_provider': sorted(f_p.items()),
+               'filter_source': sorted(f_s.items()), 'filter_lang': sorted(f_l.items()), 'filter_duration': sorted(f_d.items()),
+               'page_range': page_range, 'new_path': new_path, 'categories': categories.split('_'),
+               'providers': providers.split('_'), 'sources': sources.split('_'), 'language': language.split('_'),
+               'duration': duration.split('_'), 'list_len': len(courses_list)}
     return render(request, 'allcourses.html', context)
+
 
 
 def detail(request, course_id):
@@ -217,10 +268,12 @@ def emailing(request):
     emails = [u.email for u in User.objects.all() if len(u.email) > 0]
     subject, from_email, to = 'New courses are added', 'lucyuk.a.v@gmail.com', emails
     text_content = 'New courses are added'
-    url = static('letter.html')
-    f = open('./static/letter.html')
+    f = open('/Volumes/MemoryCard/4c2s/courses2/static/letter.html')
     html_content = ''.join(f.readlines())
     print(len(html_content))
+    courses = Course.objects.all()[:3]
+    html_content = html_content.replace("#href1#",courses[0].link).replace("#href2#", courses[1].link).replace("#href3#",courses[2].link)
+    html_content = html_content.replace("#Name1", courses[0].name).replace("#Name2", courses[1].name).replace("#Name3", courses[2].name)
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
     msg.attach_alternative(html_content, "text/html")
     msg.send()

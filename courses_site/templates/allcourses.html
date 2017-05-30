@@ -1,38 +1,196 @@
 
 {% extends "base.html" %}
 
+
 {% block content %}
 <div class="container-fluid text-center">
   <div class="row content">
     <div class="col-sm-3 sidenav" style="text-align: left;">
-    <div style="border: solid 1px #dbd3d3; border-radius: 10px; padding: 5px; background-color: #eda3aa">
+
+    <!-- <div style="border: solid 1px #dbd3d3; border-radius: 10px; padding: 5px; background-color: #eda3aa"> -->
+    <label for="sort">Sort</label>
+    <input type="checkbox" name="sort" id="sort">
+
+    <br>
+    <!-- <h5>Categories</h5> -->
+    <form class="form-horizontal">
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Categories</label>
+    <div class="col-sm-9">
+
+    <select class="selectpicker" data-style="btn-default" multiple  title="All" data-live-search="true" data-selected-text-format="count" data-actions-box="true"  data-width="fit">
+    {% for k,v in filter_category  %}
+    <option class="category" id="{{k}}" data-subtext="{{v}}">{{ k }}</option>
+    {% endfor %}
+    </select>
+    </div>
+    </div>
+    </form>
+
+    <form class="form-horizontal">
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Sources</label>
+    <div class="col-sm-9">
+    <select class="selectpicker" data-style="btn-default" multiple  title="All" data-selected-text-format="count"  data-width="fit">
+    {% for k,v  in filter_source %}
+    <option class="source" id="{{k}}" data-subtext="{{v}}">{{ k }}</option>
+    {% endfor %}
+    </select>
+    </div>
+    </div>
+    </form>
+
+    <form class="form-horizontal">
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Languages</label>
+    <div class="col-sm-9">
+    <select class="selectpicker" data-style="btn-default" multiple  title="All" data-live-search="true"  data-selected-text-format="count" data-actions-box="true"  data-width="fit">
+    {% for k,v in filter_lang %}
+    <option class="lang" id="{{k}}" data-subtext="{{v}}">{{ k }}</option>
+    {% endfor %}
+    </select>
+    </div>
+    </div>
+    </form>
+
+
+    <form class="form-horizontal">
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Duration</label>
+    <div class="col-sm-9">
+    <select class="selectpicker" data-style="btn-default" multiple  title="All" data-live-search="true"  data-selected-text-format="count"  data-width="fit">
+    {% for k,v in filter_duration %}
+    <option class="duration" id="{{k}}" data-subtext="{{v}}">{{ k }}</option>
+    {% endfor %}
+    </select>
+    </div>
+    </div>
+    </form>
+
+    <form class="form-horizontal">
+    <div class="form-group">
+    <label class="col-sm-3 control-label">Provider</label>
+    <div class="col-sm-9">
+    <select class="selectpicker" data-style="btn-default" multiple  title="All" data-live-search="true"  data-selected-text-format="count" data-actions-box="true"  data-width="fit">
+    {% for k,v in filter_provider %}
+    <option class="provider" id="{{k}}" data-subtext="{{v}}">{{ k }}</option>
+    {% endfor %}
+    </select>
+    </div>
+    </div>
+    </form>
+
+    <!-- <br> -->
+    <!-- <h5>Sources</h5> -->
+
+    <button type="button" class="btn btn-primary" onclick="search_courses()">Search!</button>
+<!--
+    <div class="multiselect">
+    <div class="selectBox" onclick="showCheckboxes(1)">
+      <select class="selectpicker" data-style="btn-primary" data-max-options="2">
+        <option>Categories</option>
+      </select>
+      <div class="overSelect"></div>
+    </div>
+    <div id="checkboxes1">
+    {% for i in filter_category %}
+      <label for="{{ i }}">
+        <input type="checkbox" class='category' name="{{ i }}" id="{{ i }}">{{ i }}</label>
+    {% endfor %}
+    </div>
+  </div>
+
+   <div class="multiselect">
+    <div class="selectBox" onclick="showCheckboxes(2)">
+      <select>
+        <option>Sources</option>
+      </select>
+      <div class="overSelect"></div>
+    </div>
+    <div id="checkboxes2">
+    {% for i in filter_source %}
+      <label for="{{ i }}">
+        <input type="checkbox" class='source' name="{{ i }}" id="{{ i }}">{{ i }}</label>
+    {% endfor %}
+    </div>
+    </div>
+
+    <div class="multiselect">
+    <div class="selectBox" onclick="showCheckboxes(3)">
+      <select>
+        <option>Languages</option>
+      </select>
+      <div class="overSelect"></div>
+    </div>
+    <div id="checkboxes3">
+    {% for i in filter_lang %}
+      <label for="{{ i }}">
+        <input type="checkbox" class='source' name="{{ i }}" id="{{ i }}">{{ i }}</label>
+    {% endfor %}
+    </div>
+  </div>
+
+      <div class="multiselect">
+    <div class="selectBox" onclick="showCheckboxes(4)">
+      <select>
+        <option>Duration</option>
+      </select>
+      <div class="overSelect"></div>
+    </div>
+    <div id="checkboxes4">
+    {% for i in filter_duration %}
+      <label for="{{ i }}">
+        <input type="checkbox" class='source' name="{{ i }}" id="{{ i }}">{{ i }}</label>
+    {% endfor %}
+    </div>
+  </div>
+
+        <div class="multiselect">
+    <div class="selectBox" onclick="showCheckboxes(5)">
+      <select>
+        <option>Provider</option>
+      </select>
+      <div class="overSelect"></div>
+    </div>
+    <div id="checkboxes5">
+    {% for i in filter_provider %}
+      <label for="{{ i }}">
+        <input type="checkbox" class='source' name="{{ i }}" id="{{ i }}">{{ i }}</label>
+    {% endfor %}
+    </div>
+  </div> -->
+
+
+
+
+<!--
     <h4>Categories</h4>
     {% for i in filter_category %}
 	<input type="checkbox" class='category' name="{{ i }}" id="{{ i }}">
     {{ i }}
 	<br/>
 	{% endfor %}
-	</div>
+	</div> -->
 
-	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
+<!-- 	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
     <h4>Sources</h4>
 	{% for i in filter_source %}
 	<input type="checkbox" class='source' name="{{ i }}" id="{{ i }}">
     {{ i }}
 	<br/>
 	{% endfor %}
-	</div>
+	</div> -->
 
-	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
+	<!-- <div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
     <h4>Languages</h4>
 	{% for i in filter_lang %}
 	<input type="checkbox" class='lang' name="{{ i }}" id="{{ i }}">
     {{ i }}
 	<br/>
 	{% endfor %}
-	</div>
+	</div> -->
 
-	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
+<!-- 	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
     <h4>Duration (weeks)</h4>
 	{% for i in filter_duration %}
 	<input type="checkbox" class='duration' name="{{ i }}" id="{{ i }}">
@@ -40,8 +198,8 @@
 	<br/>
 	{% endfor %}
 	</div>
-
-	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
+ -->
+<!-- 	<div style="border: solid 1px #dbd3d3; border-radius: 10px; margin-top: 10px; padding: 5px; background-color: #eda3aa">
     <h4>Provider</h4>
 	{% for i in filter_provider %}
 	<input type="checkbox" class='provider' name="{{ i }}" id="{{ i }}">
@@ -49,13 +207,16 @@
 	<br/>
 	{% endfor %}
 	</div>
-
+ -->
 
     </div>
     <div class="col-sm-7 text-left">
       {% if courses_list %}
       <div class="container">
-
+      <div class="page-header">
+        <h2>Viewing {{list_len}} results matching</h2>
+      </div>
+      <!-- <h2 class="bg-info">Viewing {{list_len}} results matching</h2> -->
 		{% for course in courses_list %}
 		   <div class="row" style="margin-top: 10px;">
 		                       <figure class="pull-left">
@@ -78,21 +239,25 @@
 
 		<ul class="pagination">
 		    {% if courses_list.has_previous %}
-		      <li><a href="{{request.path}}?page={{ courses_list.previous_page_number }}">&laquo;</a></li>
+		      <!-- <li><a href="http://127.0.0.1:8000{{request.get_full_path}}&page={{ courses_list.previous_page_number }}">&laquo;</a></li> -->
+		      <li><a href="{{new_path}}&page={{ courses_list.previous_page_number }}">&laquo;</a></li>
 		    {% else %}
 		      <li class="disabled"><span>&laquo;</span></li>
 		    {% endif %}
 
 		    {% for pg in page_range %}
 		            {% if courses_list.number == pg %}
-		                <li class="active"><a href="{{request.path}}?page={{pg}}">{{pg}}</a></li>
+		                <!-- <li class="active"><a href="http://127.0.0.1:8000{{request.get_full_path}}&page={{pg}}">{{pg}}</a></li> -->
+		                <li class="active"><a href="{{new_path}}&page={{pg}}">{{pg}}</a></li>
 		            {% else %}
-		                <li><a href="{{request.path}}?page={{pg}}">{{pg}}</a></li>
+		                <!-- <li><a href="http://127.0.0.1:8000{{request.get_full_path}}&page={{pg}}">{{pg}}</a></li> -->
+		                <li><a href="{{new_path}}&page={{pg}}">{{pg}}</a></li>
 		            {% endif %}
 		    {% endfor %}
 
 		    {% if courses_list.has_next %}
-		      <li><a href="{{request.path}}?page={{ courses_list.next_page_number }}">&raquo;</a></li>
+		      <!-- <li><a href="http://127.0.0.1:8000{{request.get_full_path}}&page={{ courses_list.next_page_number }}">&raquo;</a></li> -->
+		      <li><a href="{{new_path}}&page={{ courses_list.next_page_number }}">&raquo;</a></li>
 		    {% else %}
 		      <li class="disabled"><span>&raquo;</span></li>
 		    {% endif %}
@@ -102,9 +267,137 @@
 		{% endif %}
 
 
-        </div>
-    </div>
-  </div>
-</div>
 
+
+    </div>
+
+  </div>
+
+<script type="text/javascript">
+
+    {% if categories %}
+    {% for c in categories %}
+    $("[id='"+'{{c}}'+"']").prop('selected', 'selected');
+    {% endfor %}
+    {% endif %}
+
+
+    {% if providers %}
+    {% for p in providers %}
+    $("[id='"+'{{p}}'+"']").prop('selected', 'selected');
+    {% endfor %}
+    {% endif %}
+
+
+    {% if sources %}
+    {% for s in sources %}
+    $("[id='"+'{{s}}'+"']").prop('selected', 'selected');
+    {% endfor %}
+    {% endif %}
+
+
+    {% if language %}
+    {% for l in language %}
+    $("[id='"+'{{l}}'+"']").prop('selected', 'selected');
+    {% endfor %}
+    {% endif %}
+
+    {% if duration %}
+    {% for d in duration %}
+    $("[id='"+'{{d}}'+"']").prop('selected', 'selected');
+    {% endfor %}
+    {% endif %}
+
+
+    var new_href = '?';
+
+
+    $("#sort").change(function(){
+    new_href += '&sorted=';
+        if(this.checked===true) {
+            console.log('sorted')
+            new_href += 'true' + '_';
+        }
+
+    set_options();
+    window.location = new_href.slice(0, -1);
+    })
+
+
+function set_options(){
+    $options_cat = $(".category");
+    $options_source = $(".source");
+    $options_lang= $(".lang");
+    $options_prov = $(".provider");
+    $options_dur= $(".duration");
+
+    if ($('.category:selected').length > -1) {
+    new_href+='&c=';
+        $options_cat.each(function(){
+            console.log('aaaaaa')
+            if($(this).is(':selected')){
+                new_href += this.id+'_';
+
+            }
+        });
+    }
+
+    if ($('.source:selected').length > -1) {
+    new_href+='&s=';
+            $options_source.each(function(){
+            if($(this).is(':selected')){
+                new_href += this.id+'_';
+
+            }
+        });
+    }
+
+    if ($('.lang:selected').length > -1) {
+        // console.log('l ' +$('.lang:selected').length)
+    new_href+='&l=';
+            $options_lang.each(function(){
+            if($(this).is(':selected')){
+                new_href += this.id+'_';
+
+            }
+        });
+    }
+
+    if ($('.provider:selected').length > -1) {
+    new_href+='&p=';
+            $options_prov.each(function(){
+            if($(this).is(':selected')){
+                new_href += this.id+'_';
+
+            }
+        });
+    }
+
+    if ($('.duration:selected').length > -1) {
+    new_href+='&d=';
+            $options_dur.each(function(){
+            if($(this).is(':selected')){
+                new_href += this.id+'_';
+
+            }
+        });
+    }
+}
+
+function search_courses(){
+    // var new_href = '?';
+
+    // new_href += '&sorted=';
+    //     $checkbox_sort.each(function () {
+    //       if(this.checked===true) {
+    //             new_href += 'true' + '_';
+    //         }
+    //     });
+    set_options();
+    console.log(new_href.slice(0, -1))
+    window.location = new_href.slice(0, -1);
+}
+
+
+</script>
 {% endblock content %}
