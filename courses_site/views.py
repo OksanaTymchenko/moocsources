@@ -11,8 +11,7 @@ from django.db.models import Count
 
 from .models import *
 from .recommend import *
-from itertools import chain
-from django.db.models import Q
+
 
 
 def index(request):
