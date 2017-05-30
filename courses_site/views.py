@@ -266,7 +266,7 @@ def search(request):
 
 def emailing(request):
     emails = [u.email for u in User.objects.all() if len(u.email) > 0]
-    subject, from_email, to = 'New courses are added', 'lucyuk.a.v@gmail.com', emails
+    subject, from_email, to = 'New courses are added', 'moocsources@gmail.com', emails
     text_content = 'New courses are added'
     f = open('./static/letter.html')
     html_content = ''.join(f.readlines())
