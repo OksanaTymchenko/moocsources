@@ -34,21 +34,21 @@
 
 		<ul class="pagination">
 		    {% if courses_list.has_previous %}
-		      <li><a href="http://127.0.0.1:8000{{request.path}}?search={{ search }}&page={{ courses_list.previous_page_number }}">&laquo;</a></li>
+		      <li><a href="{{request.path}}?search={{ search }}&page={{ courses_list.previous_page_number }}">&laquo;</a></li>
 		    {% else %}
 		      <li class="disabled"><span>&laquo;</span></li>
 		    {% endif %}
 
 		    {% for pg in page_range %}
 		            {% if courses_list.number == pg %}
-		                <li class="active"><a href="http://127.0.0.1:8000{{request.path}}?search={{ search }}&page={{pg}}">{{pg}}</a></li>
+		                <li class="active"><a href="{{request.path}}?search={{ search }}&page={{pg}}">{{pg}}</a></li>
 		            {% else %}
-		                <li><a href="http://127.0.0.1:8000{{request.path}}?search={{ search }}&page={{pg}}">{{pg}}</a></li>
+		                <li><a href="{{request.path}}?search={{ search }}&page={{pg}}">{{pg}}</a></li>
 		            {% endif %}
 		    {% endfor %}
 
 		    {% if courses_list.has_next %}
-		      <li><a href="http://127.0.0.1:8000{{request.path}}?search={{ search }}&page={{ courses_list.next_page_number }}">&raquo;</a></li>
+		      <li><a href="{{request.path}}?search={{ search }}&page={{ courses_list.next_page_number }}">&raquo;</a></li>
 		    {% else %}
 		      <li class="disabled"><span>&raquo;</span></li>
 		    {% endif %}

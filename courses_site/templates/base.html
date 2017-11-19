@@ -27,21 +27,21 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li><img src="{% static "logo.jpg" %}" alt="LOGO" style="width: 80px; height: 50px;"/></li>
-                <li class="active" style="margin-left: 15px;"><a href="http://127.0.0.1:8000/index">Home</a></li>
+                <li class="active" style="margin-left: 15px;"><a href="/index">Home</a></li>
                 {% if request.user.is_staff %}
-                    <li><a href="http://127.0.0.1:8000/profile">Profile</a></li>
+                    <li><a href="/profile">Profile</a></li>
                 {% endif %}
 
-                <li><a href="http://127.0.0.1:8000/courses">All courses</a></li>
+                <li><a href="/courses">All courses</a></li>
                 {% if not request.user.id is None and not request.user.is_staff %}
-                    <li><a href="http://127.0.0.1:8000/favlist">My Favorites</a></li></li>
+                    <li><a href="/favlist">My Favorites</a></li></li>
                     <li><a href="/recommend">My Recommendations</a></li></li>
                     <li><a href="/user_account">My account</a></li>
                 {% endif %}
 
 
             </ul>
-            <form class="navbar-form navbar-left" action="http://127.0.0.1:8000/search/" method="get">
+            <form class="navbar-form navbar-left" action="/search/" method="get">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Search" name="search">
                     <div class="input-group-btn">
@@ -53,13 +53,13 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.id is None %}
-                    <li><a href="http://127.0.0.1:8000/signup"><span class="glyphicon glyphicon-flag"></span>Sign up</a>
+                    <li><a href="/signup"><span class="glyphicon glyphicon-flag"></span>Sign up</a>
                     </li>
-                    <li><a href="http://127.0.0.1:8000/login"><span class="glyphicon glyphicon-user"></span>Login</a>
+                    <li><a href="/login"><span class="glyphicon glyphicon-user"></span>Login</a>
                     </li>
                 {% endif %}
                 {% if not request.user.id is None %}
-                    <li><a href="http://127.0.0.1:8000/logout"><span class="glyphicon glyphicon-trash"></span>Logout</a>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-trash"></span>Logout</a>
                     </li>
                 {% endif %}
             </ul>
