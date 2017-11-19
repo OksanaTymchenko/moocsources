@@ -4,6 +4,7 @@ from courses_site import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
+    url(r'^$', views.index, name='index'),
     url(r'^courses/', include('courses_site.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^signup/', views.signup),

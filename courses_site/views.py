@@ -294,7 +294,7 @@ def emailing(request):
     return HttpResponse(render(request, 'profile.html'))
 
 
-def recommendations(request):
+def generate_recommendations(request):
     #user = int(user)
     courses = []
     liked = True
@@ -349,9 +349,24 @@ def recommendations(request):
         print(course_ids)
     return courses, course_ids
 
+def recommendations(request):
+    courses = []
+    user_rec = Recommendation.objects.filter(user_id=request.user.id)
+    if len(user_rec)!=0:
+        ids = user_rec[0].courses.split(';')
+        for i in ids:
+            c = Course.objects.get(id=i)
+            courses.append(c)
+        return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
+    else:
+        courses, course_ids = generate_recommendations(request)
+        recommendation = Recommendation.objects.create(user=User.objects.get(id=request.user.id), courses=course_ids)
+        recommendation.save()
+        return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
+
 def regenerate(request):
     user_rec = Recommendation.objects.get(user_id=request.user.id)
-    courses, course_ids = recommendations(request)
+    courses, course_ids = generate_recommendations(request)
     user_rec.courses = course_ids
     user_rec.save()
     return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
