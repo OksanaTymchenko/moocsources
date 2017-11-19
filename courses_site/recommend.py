@@ -53,44 +53,44 @@ def user_to_count(if_str):
 def sort_dict_dec(d):
     return sorted(d.keys(),key=lambda s:d[s],reverse=True)
 
-def User_Score(user_cources, u2c, q=1, a=0):
-   c_scores = {}
+def User_Score(user_songs, u2c, q=1, a=0):
+   s_scores = {}
    for u_tr in u2c:
        if not u_tr in u2c:
            continue
-       w = float(len(u2c[u_tr] & user_cources))
+       w = float(len(u2c[u_tr] & user_songs))
        if w > 0:
-           l1 = len(user_cources)
+           l1 = len(user_songs)
            l2 = len(u2c[u_tr])
            w /= (math.pow(l1, a) * (math.pow(l2, (1.0 - a))))
            w = math.pow(w, q)
-       for c in u2c[u_tr]:
-           if c in c_scores:
-               c_scores[c] += w
+       for s in u2c[u_tr]:
+           if s in s_scores:
+               s_scores[s] += w
            else:
-               c_scores[c] = w
-   return c_scores
+               s_scores[s] = w
+   return s_scores
 
 def RecommendToUser(user, u2c, ord_courses, fav, num):
-    cleaned_cources = []
-    scources = []
+    songs_sorted = []
+    cleaned_songs = []
+    ssongs = []
     if user in u2c:
-        scources = sort_dict_dec(User_Score(u2c[user], u2c))
+        ssongs = sort_dict_dec(User_Score(u2c[user], u2c))
     else:
-        scources = list(ord_courses)
-        for x in scources:
-            if len(cleaned_cources) >= num:
+        ssongs = list(ord_courses)
+        for x in ssongs:
+            if len(cleaned_songs) >= num:
                 break
             if x not in fav:
-                cleaned_cources.append(x)
-        return cleaned_cources
-    print(scources)
-    for x in scources:
-        if len(cleaned_cources) >= num:
+                cleaned_songs.append(x)
+        return cleaned_songs
+    print(ssongs)
+    for x in ssongs:
+        if len(cleaned_songs) >= num:
             break
         if (x not in u2c[user]) and (x not in fav):
-            cleaned_cources.append(x)
+            cleaned_songs.append(x)
 
-    return cleaned_cources
-
-
+    #songs_sorted += [cleaned_songs]
+    return cleaned_songs

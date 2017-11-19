@@ -1,21 +1,30 @@
-import random
-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
-from django.templatetags.static import static
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
+from rest_framework.generics import ListCreateAPIView
 
-from .models import *
+from serializers import *
+from rest_framework import viewsets, generics
+
+import random
 from .recommend import *
 
+from .models import *
 
 
 def index(request):
     return HttpResponse(render(request, 'index.html'))
+
+def user_account(request):
+    usr = User.objects.get(id=request.user.id)
+    total_likes = Like.objects.filter(user=usr).count()
+    total_favorites = Favorite.objects.filter(user=usr).count()
+    return HttpResponse(render(request, 'user_account.html', context={'user': usr, 'likes': total_likes, 'fav': total_favorites}))
+
+
 
 
 def allcourses(request):
@@ -52,7 +61,7 @@ def allcourses(request):
         courses_list = courses_list.filter(duration_filter__in=duration.split('_'))
 
 
-    # Sorting part
+
     if sort:
         print("sort")
         sorted_courses = []
@@ -123,7 +132,6 @@ def allcourses(request):
                'providers': providers.split('_'), 'sources': sources.split('_'), 'language': language.split('_'),
                'duration': duration.split('_'), 'list_len': len(courses_list)}
     return render(request, 'allcourses.html', context)
-
 
 
 def detail(request, course_id):
@@ -266,12 +274,18 @@ def search(request):
 
 def emailing(request):
     emails = [u.email for u in User.objects.all() if len(u.email) > 0]
-    subject, from_email, to = 'New courses are added', 'moocsources@gmail.com', emails
+    subject, from_email, to = 'New courses are added', 'lucyuk.a.v@gmail.com', emails
     text_content = 'New courses are added'
-    f = open('./static/letter.html')
+    f = open('/Volumes/MemoryCard/4c2s/courses/static/letter.html')
     html_content = ''.join(f.readlines())
     print(len(html_content))
     courses = Course.objects.all()[:3]
+    for c in courses:
+        print(c.name)
+        print(c.link)
+    print(courses[0].name)
+    print(courses[0].link)
+    print(courses[1].name)
     html_content = html_content.replace("#href1#",courses[0].link).replace("#href2#", courses[1].link).replace("#href3#",courses[2].link)
     html_content = html_content.replace("#Name1", courses[0].name).replace("#Name2", courses[1].name).replace("#Name3", courses[2].name)
     msg = EmailMultiAlternatives(subject, text_content, from_email, to)
@@ -279,22 +293,8 @@ def emailing(request):
     msg.send()
     return HttpResponse(render(request, 'profile.html'))
 
-def recommendations(request):
-    courses = []
-    user_rec = Recommendation.objects.filter(user_id=request.user.id)
-    if len(user_rec)!=0:
-        ids = user_rec[0].courses.split(';')
-        for i in ids:
-            c = Course.objects.get(id=i)
-            courses.append(c)
-        return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
-    else:
-        courses, course_ids = recommend(request)
-        recommendation = Recommendation.objects.create(user=User.objects.get(id=request.user.id), courses=course_ids)
-        recommendation.save()
-        return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
 
-def recommend(request):
+def recommendations(request):
     #user = int(user)
     courses = []
     liked = True
@@ -351,7 +351,51 @@ def recommend(request):
 
 def regenerate(request):
     user_rec = Recommendation.objects.get(user_id=request.user.id)
-    courses, course_ids = recommend(request)
+    courses, course_ids = recommendations(request)
     user_rec.courses = course_ids
     user_rec.save()
     return HttpResponse(render(request, 'recommendations.html', context={'courses_list': courses}))
+
+
+#
+
+#SERIALIZERS REST
+
+class AccountList(generics.ListCreateAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+class AccountDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class CourseList(generics.ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class QuestionnaireList(generics.ListCreateAPIView):
+    queryset = Questionnaire.objects.all()
+    serializer_class = QuestionnaireSerializer
+
+class QuestionnaireDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Questionnaire.objects.all()
+    serializer_class = QuestionnaireSerializer
+
+
+
+
+
+
+

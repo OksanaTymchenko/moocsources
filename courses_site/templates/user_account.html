@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1 align="center">Hi, {{ user.username }}</h1>
+    <div style="margin-left: 600px; margin-top: 30px;">
+        <img src="https://www.jamf.com/jamf-nation/img/default-avatars/generic-user-purple.png" alt=":(" style="width: 250px; height: 250px;">
+        <p>My likes <span class="glyphicon glyphicon-heart"></span>:{{ likes }} </p>
+        <p>My favorites <span class="glyphicon glyphicon-star"></span>:{{ fav }} </p>
+        <p><a href="/questionnaire">Want to change my questionnaire<a/></p>
+    </div>
+{% endblock %}
