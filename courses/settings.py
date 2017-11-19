@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'psycopg2'
+    'rest_framework',
 ]
+
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
