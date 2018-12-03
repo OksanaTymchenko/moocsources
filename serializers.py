@@ -1,23 +1,42 @@
 from rest_framework import serializers
-from courses_site.models import *
-
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = ('is_admin', 'questionaire', 'user')
+from financeapp.models import *
 
 class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only=True)
+
+    def create(self, validated_data):
+        user = User.objects.create_user(username=validated_data['username'], password=validated_data['password'])
+        return user
+
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('id', 'username', 'password')
 
-class QuestionnaireSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        account = Account.objects.create(user=validated_data['user'], limit=validated_data['limit'])
+        return account
+
+
     class Meta:
-        model = Questionnaire
-        fields = ('preferences', 'rate', 'is_free', 'language', 'duration')
+        model = Account
+        fields = ('user', 'limit')
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class OutcomesSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        outcomes = Outcomes.objects.create(user=validated_data['user'], type=validated_data['type'],
+                                           date=validated_data['date'], amount=validated_data['amount'])
+        return outcomes
+
     class Meta:
-        model = Course
-        fields = ('name', 'category', 'source', 'provider', 'language', 'description')
+        model = Outcomes
+        fields = ('user', 'type', 'date', 'amount')
+
+
+class OutcomesTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OutcomeType
+        fields = ('type', 'id')
